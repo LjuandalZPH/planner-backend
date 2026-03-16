@@ -1,24 +1,28 @@
-name: CI
+name: Backend CI
 
 on:
   push:
+    branches: [main]
   pull_request:
 
 jobs:
   test:
+
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Descargar repo
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements/base.txt
-      - name: Run tests
-        env:
-          DJANGO_SETTINGS_MODULE: core.settings
-        run: |
-          python manage.py test
 
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+
+      - name: Ejecutar tests
+        run: |
+          pytest
